@@ -1,0 +1,91 @@
+--------------------------------------------------fibo--------------------------------------------------------------
+def fib(n):
+    if n<=1:
+        return n
+    return fib(n-1)+fib(n-2)
+    
+num = int(input("Enter the number : "))
+recursion=[]
+for i in range(1,num+1):
+    recursion.append(str(fib(i)))
+print((recursion))     
+
+
+---------------------------------------------------Fractional Knapsack----------------------------------------------------
+class Item:
+    def _init_(self,value,weight):
+        self.value=value
+        self.weight=weight
+    
+def fractionalknapsack(W, arr):
+    arr.sort(key=lambda x:(x.value/x.weight), reverse=True)
+    
+    finalvalue=0.0
+    
+    for item in arr:
+        if item.weight<=W:
+            W-=item.weight
+            finalvalue+=item.value
+        else:
+            finalvalue+=item.value*W/item.weight
+    
+    
+    return finalvalue
+
+if _name=="__main_":
+    W=50
+    arr=[Item(60,10),Item(100,20),Item(120,30)]
+    print(fractionalknapsack(W, arr))
+
+
+
+-----------------------------------------------------------  0-1 knapsack  -------------------------------------------------
+def knapsack(W, wt, val, n):
+    K=[[0 for x in range(W+1)]for x in range(n+1)]
+    for i in range (n+1):
+        for w in range(W+1):
+            if i==0 or w==0:
+                K[i][w]=0
+            elif wt[i-1]<=w:
+                K[i][w]=max(val[i-1]+K[i-1][w-wt[i-1]],K[i-1][w])
+            else:
+                K[i][w]=K[i-1][w]
+    return K[n][w]
+    
+val=[60, 100, 120]
+wt=[10, 20, 30]
+W=50
+n=len(val)
+print(knapsack(W, wt, val, n))
+
+
+------------------------------------------------------  n-Queens --------------------------------------------------------
+
+print ("Enter the number of queens")
+N = int(input())
+
+board = [[0]*N for _ in range(N)]
+def attack(i, j):
+    for k in range(0,N):
+        if board[i][k]==1 or board[k][j]==1:
+            return True
+    for k in range(0,N):
+        for l in range(0,N):
+            if (k+l==i+j) or (k-l==i-j):
+                if board[k][l]==1:
+                    return True
+    return False
+def N_queens(n):
+    if n==0:
+        return True
+    for i in range(0,N):
+        for j in range(0,N):
+            if (not(attack(i,j))) and (board[i][j]!=1):
+                board[i][j] = 1
+                if N_queens(n-1)==True:
+                    return True
+                board[i][j] = 0
+    return False
+N_queens(N)
+for i in board:
+    print (i)
